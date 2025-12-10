@@ -1,12 +1,25 @@
 import './App.css';
-import { useState } from 'react';
-import List from './components/list'
+import { useEffect, useState } from 'react';
+import List from './components/list';
+import Loading from './components/Loading';
 import { filterPeople } from './utils/filterPeople';
 import candidatos from './data/candidatos_sample_para_business_case.json';
 
 function App() {
   const [filters, setFilters] = useState({});
-  const filteredPeople = filterPeople(candidatos, filters);
+  const [filteredPeople, setFilteredPeople] = useState(candidatos);
+  const [loading, setLoading] = useState(false);
+
+  // Debounce simple para simular carga durante el filtrado
+  useEffect(() => {
+    setLoading(true);
+    const handler = setTimeout(() => {
+      setFilteredPeople(filterPeople(candidatos, filters));
+      setLoading(false);
+    }, 250);
+
+    return () => clearTimeout(handler);
+  }, [filters]);
 
   return (
     <div className="App">
@@ -51,11 +64,10 @@ function App() {
             Is Migrant
           </label>
         </div>
-
         <p>Total: {filteredPeople.length} candidates</p>
       </header>
 
-      <List people={filteredPeople} />
+      {loading ? <Loading /> : <List people={filteredPeople} />}
     </div>
   );
 }
