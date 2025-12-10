@@ -9,13 +9,22 @@ function App() {
   const [filters, setFilters] = useState({});
   const [filteredPeople, setFilteredPeople] = useState(candidatos);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   // Debounce simple para simular carga durante el filtrado
   useEffect(() => {
     setLoading(true);
+    setError(null);
     const handler = setTimeout(() => {
-      setFilteredPeople(filterPeople(candidatos, filters));
-      setLoading(false);
+      try {
+        const result = filterPeople(candidatos, filters);
+        setFilteredPeople(result);
+      } catch (err) {
+        setError(err.message || 'Error al filtrar resultados');
+        setFilteredPeople([]);
+      } finally {
+        setLoading(false);
+      }
     }, 250);
 
     return () => clearTimeout(handler);
@@ -67,7 +76,7 @@ function App() {
         <p>Total: {filteredPeople.length} candidates</p>
       </header>
 
-      {loading ? <Loading /> : <List people={filteredPeople} />}
+      {error ? <Loading error={error} /> : loading ? <Loading /> : filteredPeople.length === 0 ? <Loading isEmpty /> : <List people={filteredPeople} />}
     </div>
   );
 }

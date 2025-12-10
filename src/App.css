@@ -88,3 +88,26 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.error-state {
+  min-height: 400px;
+  gap: 16px;
+}
+
+.error-icon {
+  font-size: 48px;
+  margin: 0;
+}
+
+.error-message {
+  font-size: 18px;
+  font-weight: bold;
+  color: #d32f2f;
+  margin: 0;
+}
+
+.error-detail {
+  font-size: 14px;
+  color: #999;
+  margin: 0;
+}
