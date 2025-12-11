@@ -17,3 +17,8 @@
 - Acceder a la aplicación en tu navegador
   
   [http://localhost:3000](http://localhost:3000) 
+
+
+## Ejecutar pruebas unitarias
+
+  `docker exec -it visualizacion-filtrado-app npm test`
