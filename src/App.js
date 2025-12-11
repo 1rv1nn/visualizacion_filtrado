@@ -1,12 +1,34 @@
 import './App.css';
-import { useState } from 'react';
-import List from './components/list'
+import { useEffect, useState } from 'react';
+import List from './components/list';
+import Loading from './components/Loading';
 import { filterPeople } from './utils/filterPeople';
 import candidatos from './data/candidatos_sample_para_business_case.json';
 
 function App() {
   const [filters, setFilters] = useState({});
-  const filteredPeople = filterPeople(candidatos, filters);
+  const [filteredPeople, setFilteredPeople] = useState(candidatos);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Debounce simple para simular carga durante el filtrado
+  useEffect(() => {
+    setLoading(true);
+    setError(null);
+    const handler = setTimeout(() => {
+      try {
+        const result = filterPeople(candidatos, filters);
+        setFilteredPeople(result);
+      } catch (err) {
+        setError(err.message || 'Error al filtrar resultados');
+        setFilteredPeople([]);
+      } finally {
+        setLoading(false);
+      }
+    }, 250);
+
+    return () => clearTimeout(handler);
+  }, [filters]);
 
   return (
     <div className="App">
@@ -17,6 +39,7 @@ function App() {
           <input
             type="text"
             placeholder="Search by name or email..."
+            // Genera nueva copia del objeto, sobrescribe el valor searchText con el nuevo valor y se accede
             onChange={(e) => setFilters({ ...filters, searchText: e.target.value })}
           />
           
@@ -51,11 +74,10 @@ function App() {
             Is Migrant
           </label>
         </div>
-
         <p>Total: {filteredPeople.length} candidates</p>
       </header>
 
-      <List people={filteredPeople} />
+      {error ? <Loading error={error} /> : loading ? <Loading /> : filteredPeople.length === 0 ? <Loading isEmpty /> : <List people={filteredPeople} />}
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import List from './List';
+import List from './list';
 
 describe('List Component', () => {
   const mockPeople = [
@@ -28,14 +28,14 @@ describe('List Component', () => {
     expect(screen.getByText(/2 years/i)).toBeInTheDocument();
   });
 
-  // 🔴 RED - Test 4: Mostrar badges para RFC y Migrante
-  test('displays RFC and Migrant badges', () => {
+  // 🔴 RED - Test 4: Mostrar información de RFC y estado migrante
+  test('displays RFC and Migrant information', () => {
     render(<List people={mockPeople} />);
-    const rfcBadges = screen.getAllByText(/RFC/i);
-    expect(rfcBadges.length).toBeGreaterThan(0);
+    const allText = screen.getAllByText(/RFC:/i);
+    expect(allText.length).toBeGreaterThan(0);
     
-    const migrantBadge = screen.getByText(/Migrant/i);
-    expect(migrantBadge).toBeInTheDocument();
+    const migrantText = screen.getAllByText(/Migrant:/i);
+    expect(migrantText.length).toBeGreaterThan(0);
   });
 
   // 🔴 RED - Test 5: Renderizar el número correcto de personas
