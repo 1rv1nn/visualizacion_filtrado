@@ -39,6 +39,7 @@ function App() {
           <input
             type="text"
             placeholder="Search by name or email..."
+            // Genera nueva copia del objeto, sobrescribe el valor searchText con el nuevo valor y se accede
             onChange={(e) => setFilters({ ...filters, searchText: e.target.value })}
           />
           

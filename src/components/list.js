@@ -13,7 +13,7 @@ const List = ({ people }) => {
   return (
     <div className="people-list">
       {people.map(person => (
-        <div key={person.id} className="person-card">
+        <div key={person.id} className="person-card" data-testid="person-card">
           <h3>{person.name}</h3>
           <p><strong>Email:</strong> {person.email}</p>
           <p><strong>Role:</strong> {person.role}</p>
